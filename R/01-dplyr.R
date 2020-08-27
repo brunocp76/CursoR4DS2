@@ -80,9 +80,9 @@ case_when(
 mtcars %>%
   mutate(
     mpg_cat = case_when(
-      mpg < 15 ~ "bebe bem",
-      mpg < 22 ~ "regular",
-      mpg >= 22 ~ "economico"
+      mpg < 15 ~ "Bebe bem",
+      mpg < 22 ~ "Regular",
+      mpg >= 22 ~ "Economico"
     )
   )
 
@@ -90,9 +90,9 @@ mtcars %>%
 mtcars %>%
   mutate(
     mpg_cat = case_when(
-      mpg < 15 ~ "bebe bem",
-      mpg < 22 ~ "regular",
-      TRUE ~ "economico"
+      mpg < 15 ~ "Bebe bem",
+      mpg < 22 ~ "Regular",
+      TRUE ~ "Economico"
     )
   )
 
