@@ -1,7 +1,6 @@
 # 2. tidyr ----------------------------------------------------------------
 
 library(tidyr)
-library(dplyr)
 
 imdb <- readr::read_rds("data/imdb.rds")
 
@@ -51,7 +50,7 @@ imdb %>%
 
 # pivotagem ---------------------------------------------------------------
 
-# pivot_longer (antigo gather)
+# pivot_longer
 
 imdb %>%
   pivot_longer(
@@ -74,7 +73,7 @@ imdb %>%
   filter(ator == "Will Smith") %>%
   View()
 
-# pivot_wider (antigo spread)
+# pivot_wider
 
 tab_romance_terror <- imdb %>%
   filter(ano >= 2010) %>%
@@ -146,8 +145,6 @@ list(1, "a", TRUE)
 # Veja que, diferente de um vetor, podemos
 # guardar objetos de classes diferentes.
 
-c(1, "a", TRUE)
-
 # Podemos dar nomes à cada posição
 
 list(cliente = "Ana Silva", idade = 25, estado_civil = NA)
@@ -161,9 +158,8 @@ list(
   estado_civil = c(NA, "Solteira(o)")
 )
 
-# Um data frame nada mais é do que:
-# 1) uma lista nomeada
-# 2) com vetores de mesmo tamanho
+# Um data frame nada mais é do que uma lista nomeda
+# com vetores de mesmo tamanho
 
 list(
   cliente = c("Ana Silva", "Bruno Santos"),
@@ -219,6 +215,5 @@ imdb_graficos <- imdb %>%
 
 imdb_graficos$grafico[[1]]
 
-# Obs importante: Quando lidamos com listas, selecionamos um item da lista com colchetes duplos!
-
 # Veremos mais sobre list-columns na aula de purrr!
+

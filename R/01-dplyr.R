@@ -80,9 +80,9 @@ case_when(
 mtcars %>%
   mutate(
     mpg_cat = case_when(
-      mpg < 15 ~ "Bebe bem",
-      mpg < 22 ~ "Regular",
-      mpg >= 22 ~ "Economico"
+      mpg < 15 ~ "bebe bem",
+      mpg < 22 ~ "regular",
+      mpg >= 22 ~ "economico"
     )
   )
 
@@ -90,9 +90,9 @@ mtcars %>%
 mtcars %>%
   mutate(
     mpg_cat = case_when(
-      mpg < 15 ~ "Bebe bem",
-      mpg < 22 ~ "Regular",
-      TRUE ~ "Economico"
+      mpg < 15 ~ "bebe bem",
+      mpg < 22 ~ "regular",
+      TRUE ~ "economico"
     )
   )
 
@@ -232,16 +232,7 @@ ames %>%
   summarise(across(
     .cols = c(lote_area, venda_valor),
     .fns = mean, na.rm = TRUE
-))
-
-# Sugestão de um colega - Incluir o prefixo!
-ames %>%
-  group_by(geral_qualidade) %>%
-  summarise(across(
-    .cols = c(lote_area, venda_valor),
-    .fns = list(media = mean, soma = sum), na.rm = TRUE
   ))
-
 
 # Podemos aplicar facilmente uma função a todas
 # as colunas de uma base
@@ -264,14 +255,6 @@ ames %>%
 ames %>%
   summarise(across(where(is.numeric), mean, na.rm = TRUE))
 
-# Ou ainda melhor, incluindo o prefixo!
-ames %>%
-  summarise(
-    across(
-      where(is.numeric),
-      list(media = mean),
-      na.rm = TRUE))
-
 # Antes fazíamos
 ames %>%
   summarise_if(is.character, n_distinct)
@@ -292,29 +275,12 @@ ames %>%
     )
   )
 
-# Ou ainda melhor, incluindo o prefixo!
-ames %>%
-  summarise(
-    across(
-      where(is.numeric) & contains("area"),
-      list(media = mean),
-      na.rm = TRUE
-    )
-  )
-
 # Agora, podemos fazer sumarizações complexas
 ames %>%
   group_by(fundacao_tipo) %>%
   summarise(
-    across(
-      contains("area"),
-      mean,
-      na.rm = TRUE
-    ),
-    across(
-      where(is.character),
-      ~sum(is.na(.x))
-    ),
+    across(contains("area"), mean, na.rm = TRUE),
+    across(where(is.character), ~sum(is.na(.x))),
     n_obs = n(),
   ) %>%
   View()
@@ -335,26 +301,15 @@ ames %>%
     ~ .x / 10.764
   ))
 
-# Enxergando os parâmetros da função across...
-ames %>%
-  mutate(across(
-    .cols = contains("area"),
-    .fns = ~ .x / 10.7639104167097223083335055559
-  )) %>% View()
-
 # filter()
 # Pegar todas as casas com varanda aberta,
 # cerca e lareira
 ames %>%
   filter(across(
-    .cols = c(
-      varanda_aberta_area,
-      cerca_qualidade,
-      lareira_qualidade
-    ),
-    .fns = ~!is.na(.x)
+    c(varanda_aberta_area, cerca_qualidade, lareira_qualidade),
+    ~!is.na(.x)
   )) %>%
-  select(c(varanda_aberta_area, cerca_qualidade, lareira_qualidade)) %>%
+  # select(c(varanda_aberta_area, cerca_qualidade, lareira_qualidade)) %>%
   View()
 
 
@@ -373,19 +328,6 @@ ames %>%
 ames %>%
   rename_with(toupper, contains("venda"))
 
-# Mas atenção! Neste caso em específico precisamos passar primeiro a função e depois a seleção de colunas...
-
-ames %>%
-  rename_with(
-    stringr::str_replace_all,
-    .cols = everything(),
-    pattern = "_",
-    replacement = " "
-  )
-
-?snakecase::to_title_case()
-
-
 # relocate ----------------------------------------------------------------
 
 # Por padrão, traz uma coluna
@@ -393,10 +335,6 @@ ames %>%
 
 ames %>%
   relocate(venda_valor)
-
-# Isso seria o equivalente a:
-ames %>%
-  select(venda_valor, everything())
 
 
 # Os argumentos .before e .after
@@ -444,7 +382,7 @@ tab_notas %>%
   rowwise(student_id) %>%
   mutate(media = mean(c_across(starts_with("prova"))))
 
-# Não é preciso passar uma coluna id, aí ele vai agrupar por cada linha mesmo...
+# Não é preciso passar uma coluna id
 
 tab_notas %>%
   rowwise() %>%
@@ -453,3 +391,4 @@ tab_notas %>%
 
 # A função rowwise() vai ser útil quando estivermos
 # trabalhando com list-columns!
+

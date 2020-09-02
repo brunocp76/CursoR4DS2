@@ -10,9 +10,16 @@ ames <- readr::read_rds("data/ames.rds")
 
 ames %>%
   ggplot() +
-  geom_point(aes(x = geral_qualidade, y = venda_valor))
+  geom_vline(xintercept = 5, color = "#2e70db") +
+  geom_point(
+    mapping = aes(x = geral_qualidade, y = venda_valor)
+  )
 
 # Melhorando visual do gráfico
+
+# Fixando o tema dos próximos gráficos...
+
+ggplot2::theme_set(theme_dark())
 
 ames %>%
   ggplot() +
@@ -29,6 +36,17 @@ ames %>%
   mutate(
     geral_qualidade = as.character(geral_qualidade),
     venda_valor = venda_valor / 1000
+  ) %>%
+  ggplot() +
+  geom_boxplot(aes(x = geral_qualidade, y = venda_valor)) +
+  labs(x = "Qualidade", y = "Valor da venda (em milhares de dólares)") +
+  theme_minimal()
+
+ames %>%
+  mutate(
+    # geral_qualidade = as.character(geral_qualidade),
+    venda_valor = venda_valor / 1000,
+    geral_qualidade = letters[geral_qualidade]
   ) %>%
   ggplot() +
   geom_boxplot(aes(x = geral_qualidade, y = venda_valor)) +
@@ -69,6 +87,7 @@ tab_nc
 tab_nc %>%
   ggplot() +
   geom_sf()
+# Nem precisamos do "aes", pois por padrão o geom_sf usa a geometria do multipoligono...
 
 # Preenchendo as áreas segundo uma variável
 tab_nc %>%
@@ -84,7 +103,7 @@ tab_nc %>%
 tab_nc %>%
   ggplot() +
   geom_sf(aes(fill = AREA), color = "white") +
-  geom_sf_text(aes(label = NAME), size = 1.5, color = "white")
+  geom_sf_text(aes(label = NAME), size = 1.5, color = "orange")
 
 
 # Mapas do brasil
@@ -93,7 +112,7 @@ tab_nc %>%
 
 # Brasil
 
-tab_brasil <- geobr::read_country()
+tab_brasil <- geobr::read_country(year = 2018)
 
 tab_brasil %>%
   ggplot() +
@@ -101,7 +120,7 @@ tab_brasil %>%
 
 # Estados brasileiros
 
-tab_estados <- geobr::read_state()
+tab_estados <- geobr::read_state(year = 2019)
 
 tab_estados %>%
   ggplot() +
@@ -139,7 +158,7 @@ tab_covid_estado <- tab_covid %>%
     is.na(codmun),
     !is.na(estado)
   ) %>%
-  right_join(tab_estados, by = c("estado" = "abbrev_state"))
+  right_join(tab_estados, by = c("estado" = "abbrev_state")) %>% as.
 
 tab_covid_estado %>%
   ggplot() +
@@ -153,6 +172,8 @@ tab_covid_estado %>%
   geom_sf_label(aes(geometry = geom, label = estado), size = 2) +
   scale_fill_gradient(low = "yellow", high = "red")
 
+# Municípios...
+tab_municipios <- geobr::read_municipality()
 
 
 # Temas -------------------------------------------------------------------
@@ -163,7 +184,7 @@ library(ggplot2)
 rick_and_morty <- readr::read_rds("data/rick_and_morty.rds")
 
 img_rick <- png::readPNG("data-raw/rick.png") %>%
-  grid::rasterGrob(interpolate = TRUE)
+  grid::rasterGrob()
 
 # Um gráfico de linha
 
