@@ -16,6 +16,18 @@ ames %>%
     valor_venda_medio = mean(venda_valor, na.rm = TRUE)
   )
 
+ames %>%
+  group_by(geral_qualidade) %>%
+  summarise(
+    across(
+      c(acima_solo_area,
+        garagem_area,
+        venda_valor),
+      ~ mean(.x, na.rm = TRUE),
+      .names = c("{col}_media")
+    )
+  )
+
 # b)
 ames %>%
   filter_at(
@@ -23,9 +35,26 @@ ames %>%
     ~!is.na(.x)
   )
 
+ames %>%
+  filter(
+    across(
+      c(porao_qualidade, varanda_fechada_area, cerca_qualidade),
+      ~!is.na(.x)
+    )
+  )
+
 # c)
 ames %>%
   mutate_if(is.character, ~tidyr::replace_na(.x, replace = "Não possui"))
+
+ames %>%
+  mutate(
+    across(
+      where(is.character),
+      ~tidyr::replace_na(.x, replace = "Não possui")
+    )
+  )
+
 
 # 2.
 

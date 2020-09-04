@@ -391,4 +391,3 @@ tab_notas %>%
 
 # A função rowwise() vai ser útil quando estivermos
 # trabalhando com list-columns!
-

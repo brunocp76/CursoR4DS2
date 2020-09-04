@@ -183,7 +183,7 @@ library(ggplot2)
 
 rick_and_morty <- readr::read_rds("data/rick_and_morty.rds")
 
-img_rick <- png::readPNG("data-raw/rick.png") %>%
+img_rick <- png::readPNG("R/rick.png") %>%
   grid::rasterGrob()
 
 # Um gráfico de linha
@@ -201,7 +201,42 @@ rick_and_morty %>%
     y = qtd_espectadores_EUA,
     fill = num_temporada)
   ) +
-  geom_col()
+  geom_col() +
+  # Edicao do Bruno durante a aula...
+  labs(
+    title = "Rick and Morty",
+    x = "Episódio",
+    y = "Audiência",
+    fill = "Temporada"
+  ) +
+  scale_fill_manual(values = c("yellow", "cyan", "orange", "purple")) +
+  annotation_custom(img_rick, xmin = 35, ymin = 2) +
+  theme(
+    legend.position = "bottom",
+    plot.background = element_rect(fill = "black"),
+    legend.background = element_rect(fill = "black"),
+    panel.background = element_rect(fill = "black"),
+    # plot.title = element_text(color = "#11a2c6"), # o parâmetro abaixo é mais geral e pega todos os textos...
+    text = element_text(color = "#11a2c6"),
+    plot.title = element_text(
+      color = "#11a2ff",  # Só para tentar algo mais azul...
+      hjust = 0.5
+    ),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_line(
+      size = 0.3,
+      color = "red"
+    ),
+    axis.text = element_text(
+      color = "white",
+      size = 12
+    ),
+    axis.ticks.x = element_blank()
+  )
+# Edicao do Bruno durante a aula...
+
 
 # Construindo o tema
 
@@ -304,6 +339,8 @@ rick_and_morty %>%
   annotation_custom(img_rick, xmin = 35, ymin = 2) +
   tema_rick_and_morty()
 
+theme_set(tema_rick_and_morty())
+
 
 # Extensões do ggplot2 ----------------------------------------------------
 
@@ -358,11 +395,10 @@ covid %>%
   filter(num_obitos >= limite) %>%
   ggplot(aes(y = obitosAcumulado, x = data, color = estado)) +
   geom_line() +
-  transition_reveal(data)
+  transition_reveal(data)  # Para animar o grafico com a data!!!
 
 
 # Colocando ponto
-
 covid %>%
   filter(
     !is.na(municipio)
@@ -381,10 +417,9 @@ covid %>%
   ggplot(aes(y = obitosAcumulado, x = data, color = estado)) +
   geom_line() +
   geom_point() +
-  transition_reveal(data)
+  transition_reveal(data)  # Para animar o grafico com a data usando pontos!!!
 
 # Colocando label
-
 covid %>%
   filter(
     !is.na(municipio)

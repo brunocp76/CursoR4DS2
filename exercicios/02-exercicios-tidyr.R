@@ -69,7 +69,7 @@ fazer_graficos_dispersao <- function(base, variavel) {
   tabela_longa <- base %>%
     # código para gerar a tabela ideal para o gráfico
 
-  tabela_longa %>%
+    tabela_longa %>%
     ggplot() +
     geom_point(aes(
       #completar
