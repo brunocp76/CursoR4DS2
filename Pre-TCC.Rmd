@@ -306,24 +306,113 @@ for (i in 1:length(credito_iv$Summary$Variable)) {
 ### Árvore de decisão, um modelo simples e rápido...
 
 ```{r, warning = FALSE, message = FALSE}
-credito_arvore <- credito2 %>% 
+cred_arvore <- credito2 %>% 
    rpart::rpart(formula = status ~ .)
 ```
 
 Vamos dar uma olhada na árvore de decisão construída.
 ```{r, warning = FALSE, message = FALSE, fig.width = 11}
 rpart.plot::rpart.plot(
-   x = credito_arvore,
+   x = cred_arvore,
    type = 1,
    extra = "auto",
    digits = 3
 )
 
 rpart::plotcp(
-   x = credito_arvore,
+   x = cred_arvore,
    minline = TRUE,
 )
 
-rpart::rsq.rpart(x = credito_arvore)
+rpart::rsq.rpart(x = cred_arvore)
+```
+
+### Modelo de Regressão Logística, sem fazer **feature enginnering** nem separar a base em *treinamento* e *validação*...
+```{r}
+credito3 <- credito2 %>% 
+   filter(!is.na(status),
+          !is.na(tempo_empresa),
+          !is.na(renda),
+          !is.na(registros),
+          !is.na(trabalho),
+          !is.na(ativos),
+          !is.na(moradia),
+          !is.na(valor_emprestimo),
+          !is.na(tempo_emprestimo),
+          !is.na(idade),
+          !is.na(despesas),
+          !is.na(preco_do_bem),
+          !is.na(estado_civil),
+          !is.na(dividas)
+   ) %>%
+   mutate(
+      tp_cliente = ifelse(
+         test = status == "bom",
+         yes = 0L,
+         no = 1L
+      ),
+      moradia = as.factor(moradia),
+      estado_civil = as.factor(estado_civil),
+      registros = as.factor(registros),
+      trabalho = as.factor(trabalho),
+      status = as.integer(tp_cliente)
+   ) %>% 
+   select(-tp_cliente)
+
+cred_intercepto <- glm(
+   formula = status ~ 1,
+   family = binomial(link = "logit"),
+   data = credito3
+)
+summary(cred_intercepto)
+
+cred_completo <- glm(
+      formula = status ~ .,
+      family = binomial(link = "logit"),
+      data = credito3
+   )
+summary(cred_completo)
+```
+### Modelos de Regressão Logística *forward*, *backward* e *stepwise*, ainda sem fazer **feature engenniring**...
+```{r}
+cred_forward <- step(
+   object = cred_intercepto,
+   scope = list(
+      lower = formula(cred_intercepto),
+      upper = formula(cred_completo)
+   ),
+   direction = "forward",
+   trace = 0
+)
+
+cred_backward <- step(
+   object = cred_completo,
+   scope = list(
+      lower = formula(cred_intercepto),
+      upper = formula(cred_completo)
+   ),
+   direction = "backward",
+   trace = 0
+)
+
+cred_stepwise <- step(
+   object = cred_intercepto,
+   scope = list(
+      lower = formula(cred_intercepto),
+      upper = formula(cred_completo)
+   ),
+   direction = "both",
+   trace = 9
+)
+
+summary(cred_forward)
+summary(cred_backward)
+summary(cred_stepwise)
+```
+
+## Dados SINESP
+```{r}
+sinesp %>% 
+   glimpse()
 ```
 
