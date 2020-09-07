@@ -1,5 +1,5 @@
 ---
-title: "Analise dos Arquivos de Final de Curso"
+title: "Análise dos Arquivos de Final de Curso"
 author: "Bruno Cesar Pasquini"
 date: "06/09/2020"
 output: html_document
@@ -10,11 +10,11 @@ library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Procurando a melhor base de dados para a analise.
+# Procurando a melhor base de dados para a análise.
 
-Para decidir qual dos arquivos irei utilizar para o trabalho final de conclusao de curso.
+Para decidir qual dos arquivos irei utilizar para o trabalho final de conclusão de curso.
 
-Primeiro vamos ver quais sao os arquivos disponiveis para a analise:
+Primeiro vamos ver quais são os arquivos disponíveis para a análise:
 
 ```{r}
 dir("data")
@@ -35,7 +35,7 @@ ssp <- readRDS("data/ssp.rds")
 
 ## Base Ames
 
-### Base Ames fornecida no curso R para Ciencia de Dados II
+### Base Ames fornecida no curso R para Ciência de Dados II
 
 Olhando a base de dados das casas vendidas na cidade de Ames, Iowa, Estados Unidos
 
@@ -58,7 +58,7 @@ AmesHousing::ames_raw %>%
 
 ## Base Cetesb
 
-Olhando a base de dados de concentracao horaria de alguns poluentes em algumas estacoes de monitoramento da regiao metropolitana de Sao Paulo
+Olhando a base de dados de concentração horária de alguns poluentes em algumas estações de monitoramento da região metropolitana de São Paulo
 
 ```{r}
 cetesb %>% 
@@ -108,20 +108,27 @@ cetesb %>%
       mes
    ) %>% 
    ggplot() +
-   geom_boxplot(aes(x = poluente, y = concentracao, group = ano)) +
+   geom_boxplot(
+      aes(
+         x = poluente,
+         y = concentracao,
+         group = ano
+         )
+      ) +
    facet_wrap(~ mes)
 ```
 
 
 ## Base COVID
 
-### Base COVID-19 fornecida no curso R para Ciencia de Dados II
+### Base COVID-19 fornecida no curso R para Ciência de Dados II
 
 ```{r}
 covid %>% 
    glimpse()
 ```
-Olhando um pouco mais...
+Olhando um pouco mais, buscando algumas informações que não façam sentido...
+
 ```{r}
 covid %>% 
    group_by(regiao) %>% 
@@ -138,6 +145,8 @@ covid %>%
    count() %>% 
    arrange(desc(n))
 ```
+Buscando o filtro que pareça fazer mais sentido...
+
 ```{r}
 covid %>% 
    filter(
@@ -159,6 +168,8 @@ covid %>%
    select(data, where(is.numeric)) %>% 
    summary()
 ```
+Quais são as localidades para as quais não temos a localização do centróide?
+
 ```{r}
 covid %>% 
    filter(
@@ -193,6 +204,7 @@ datacovidbr::brMinisterioSaude() %>%
 # datacovidbr::CSSEGISandData() %>% 
 #    glimpse()
 ```
+Esta última base parece ser a base da qual foi extraída a base do curso...
 
 ```{r, warning = FALSE, message = FALSE}
 datacovidbr::brasilio() %>% 
@@ -219,7 +231,7 @@ datacovidbr::brMinisterioSaude() %>%
 credito %>% 
    glimpse()
 ```
-```{r}
+```{r, warning = FALSE, message = FALSE}
 credito %>% 
    count(status)
 
@@ -238,6 +250,7 @@ credito %>%
 credito %>% 
    count(status, registros)
 ```
+Pensando em algumas variáveis que são texto...
 
 ```{r}
 credito %>% 
@@ -250,3 +263,67 @@ credito %>%
    ) %>% 
    glimpse()
 ```
+### Olhando o Valor de Informacao nas variaveis nesta base...
+
+Neste caso a variável resposta tem que ser numérica...
+
+```{r}
+credito_iv <- credito %>% 
+   mutate(
+      tp_cliente = ifelse(
+         test = status == "bom",
+         yes = 0L,
+         no = 1L
+      ),
+      moradia = as.factor(moradia),
+      estado_civil = as.factor(estado_civil),
+      registros = as.factor(registros),
+      trabalho = as.factor(trabalho),
+      status = as.integer(tp_cliente)
+   ) %>% 
+   select(-tp_cliente) %>% 
+   Information::create_infotables(
+      y = "status",
+      bins = 10,
+      parallel = TRUE
+)
+
+credito2 <- credito %>% 
+   select(status, as.character(credito_iv$Summary$Variable))
+
+print(credito_iv$Summary,
+      row.names = FALSE)
+
+# Arrumar a chamada da lista...
+for (i in 1:length(credito_iv$Summary$Variable)) {
+   if (credito_iv$Summary$IV[i] > 0) {
+      print(credito_iv$Tables[credito_iv$Summary$Variable[i]],
+            row.names = FALSE)
+   }
+}; rm(i)
+```
+
+### Árvore de decisão, um modelo simples e rápido...
+
+```{r, warning = FALSE, message = FALSE}
+credito_arvore <- credito2 %>% 
+   rpart::rpart(formula = status ~ .)
+```
+
+Vamos dar uma olhada na árvore de decisão construída.
+```{r, warning = FALSE, message = FALSE, fig.width = 11}
+rpart.plot::rpart.plot(
+   x = credito_arvore,
+   type = 1,
+   extra = "auto",
+   digits = 3
+)
+
+rpart::plotcp(
+   x = credito_arvore,
+   minline = TRUE,
+)
+
+rpart::rsq.rpart(x = credito_arvore)
+```
+
