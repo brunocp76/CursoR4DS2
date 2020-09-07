@@ -1,0 +1,213 @@
+---
+title: "Analise dos Arquivos de Final de Curso"
+author: "Bruno Cesar Pasquini"
+date: "06/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Procurando a melhor base de dados para a analise.
+
+Para decidir qual dos arquivos irei utilizar para o trabalho final de conclusao de curso.
+
+Primeiro vamos ver quais sao os arquivos disponiveis para a analise:
+
+```{r}
+dir("data")
+```
+
+```{r echo = FALSE}
+# Lendo os arquivos...
+
+ames <- readRDS("data/ames.rds")
+cetesb <- readRDS("data/cetesb.rds")
+covid <- readRDS("data/covid.rds")
+credito <- readRDS("data/credito.rds")
+sinesp <- readRDS("data/dados_sinesp.rds")
+imdb <- readRDS("data/imdb.rds")
+ssp <- readRDS("data/ssp.rds")
+```
+
+
+## Base Ames
+
+Olhando a base de dados das casas vendidas na cidade de Ames, Iowa, Estados Unidos
+
+```{r}
+ames %>% 
+   glimpse()
+```
+
+Dando uma olhada nas bases originais...
+
+```{r}
+AmesHousing::ames_geo %>% 
+   glimpse()
+AmesHousing::ames_new %>% 
+   glimpse()
+AmesHousing::ames_raw %>% 
+   glimpse()
+```
+
+
+## Base Cetesb
+
+Olhando a base de dados de concentracao horaria de alguns poluentes em algumas estacoes de monitoramento da regiao metropolitana de Sao Paulo
+
+```{r}
+cetesb %>% 
+   glimpse()
+```
+Olhando um pouco mais...
+
+```{r}
+cetesb %>% 
+   select(estacao_cetesb, lat, long) %>% 
+   distinct()
+```
+
+```{r}
+cetesb %>% 
+   select(poluente) %>% 
+   distinct()
+```
+
+```{r}
+cetesb %>% 
+   select(data, hora) %>% 
+   head(n = 10)
+
+cetesb %>% 
+   select(data, hora) %>% 
+   tail(n = 10)
+```
+
+```{r}
+cetesb %>% 
+   filter(
+      poluente == "O3",
+      lubridate::month(data) <= 5
+   ) %>% 
+   select(
+      poluente,
+      data,
+      concentracao
+   ) %>% 
+   mutate(
+      ano = lubridate::year(data),
+      mes = lubridate::month(data)
+   ) %>% 
+   group_by(
+      ano,
+      mes
+   ) %>% 
+   ggplot() +
+   geom_boxplot(aes(x = poluente, y = concentracao, group = ano)) +
+   facet_wrap(~ mes)
+```
+
+
+## Base COVID
+
+Olhando a base de dados de contagio da COVID-19 no Brasil
+
+```{r}
+covid %>% 
+   glimpse()
+```
+Olhando um pouco mais...
+```{r}
+covid %>% 
+   group_by(regiao) %>% 
+   count() %>% 
+   arrange(desc(n))
+
+covid %>% 
+   group_by(municipio) %>% 
+   count() %>% 
+   arrange(desc(n))
+
+covid %>% 
+   group_by(codmun) %>% 
+   count() %>% 
+   arrange(desc(n))
+```
+```{r}
+covid %>% 
+   filter(
+      regiao != "Brasil",
+      !is.na(municipio),
+      !is.na(codmun)
+   ) %>% 
+   glimpse()
+```
+
+Achamos o melhor filtro... Vamos ver algumas coisas da base de dados...
+```{r}
+covid %>% 
+   filter(
+      regiao != "Brasil",
+      !is.na(municipio),
+      !is.na(codmun)
+   ) %>% 
+   select(data, where(is.numeric)) %>% 
+   summary()
+```
+```{r}
+covid %>% 
+   filter(
+      regiao != "Brasil",
+      !is.na(municipio),
+      !is.na(codmun),
+      is.na(lat) | is.na(lon)
+   ) %>% 
+   group_by(municipio, estado) %>% 
+   count()
+```
+
+Vamos agora dar uma olhada numa base externa da COVID...
+
+```{r, warning = FALSE, message = FALSE}
+datacovidbr::brasilio() %>% 
+   filter(
+      place_type == "city",
+      !is.na(city),
+      !is.na(city_ibge_code)
+   ) %>% 
+   glimpse()
+
+datacovidbr::brMinisterioSaude() %>% 
+   filter(
+      regiao != "Brasil",
+      !is.na(municipio),
+      !is.na(codmun)
+   ) %>% 
+   glimpse()
+
+# datacovidbr::CSSEGISandData() %>% 
+#    glimpse()
+```
+
+```{r, warning = FALSE, message = FALSE}
+datacovidbr::brasilio() %>% 
+   filter(
+      place_type == "city",
+      !is.na(city),
+      !is.na(city_ibge_code)
+   ) %>% 
+   select(date, where(is.numeric)) %>% 
+   summary()
+
+datacovidbr::brMinisterioSaude() %>% 
+   filter(
+      regiao != "Brasil",
+      !is.na(municipio),
+      !is.na(codmun)
+   ) %>% 
+   select(date, where(is.numeric)) %>% 
+   summary()
+```
