@@ -33,7 +33,7 @@ ssp <- readRDS("data/ssp.rds")
 ```
 
 
-## Base Ames
+## Bases Ames
 
 ### Base Ames fornecida no curso R para Ciência de Dados II
 
@@ -44,13 +44,12 @@ ames %>%
    glimpse()
 ```
 
-### Base Ames Original
+### Bases Ames Originais
 
 ```{r}
 AmesHousing::ames_geo %>% 
    glimpse()
-# AmesHousing::ames_new %>% 
-#    glimpse()
+
 AmesHousing::ames_raw %>% 
    glimpse()
 ```
@@ -88,6 +87,7 @@ cetesb %>%
    tail(n = 10)
 ```
 
+### Olhando um poluente em específico
 ```{r}
 cetesb %>% 
    filter(
@@ -263,7 +263,7 @@ credito %>%
    ) %>% 
    glimpse()
 ```
-### Olhando o Valor de Informacao nas variaveis nesta base...
+### Olhando o Valor de Informação nas variáveis nesta base...
 
 Neste caso a variável resposta tem que ser numérica...
 
@@ -288,9 +288,6 @@ credito_iv <- credito %>%
       parallel = TRUE
 )
 
-credito2 <- credito %>% 
-   select(status, as.character(credito_iv$Summary$Variable))
-
 print(credito_iv$Summary,
       row.names = FALSE)
 
@@ -306,6 +303,9 @@ for (i in 1:length(credito_iv$Summary$Variable)) {
 ### Árvore de decisão, um modelo simples e rápido...
 
 ```{r, warning = FALSE, message = FALSE}
+credito2 <- credito %>% 
+   select(status, as.character(credito_iv$Summary$Variable))
+
 cred_arvore <- credito2 %>% 
    rpart::rpart(formula = status ~ .)
 ```
@@ -329,7 +329,7 @@ rpart::rsq.rpart(x = cred_arvore)
 
 ### Modelo de Regressão Logística, sem fazer **feature enginnering** nem separar a base em *treinamento* e *validação*...
 ```{r}
-credito3 <- credito2 %>% 
+credito2 %>% 
    filter(!is.na(status),
           !is.na(tempo_empresa),
           !is.na(renda),
@@ -357,7 +357,7 @@ credito3 <- credito2 %>%
       trabalho = as.factor(trabalho),
       status = as.integer(tp_cliente)
    ) %>% 
-   select(-tp_cliente)
+   select(-tp_cliente) -> credito3
 
 cred_intercepto <- glm(
    formula = status ~ 1,
@@ -414,5 +414,52 @@ summary(cred_stepwise)
 ```{r}
 sinesp %>% 
    glimpse()
+```
+
+```{r}
+sinesp %>% 
+   group_by(regiao, mes_ano) %>% 
+   summarise(vitimas = sum(vitimas, na.rm = TRUE))
+```
+
+## Dados SSP
+
+Dando uma primeira olhada...
+```{r}
+ssp %>% 
+   glimpse()
+```
+
+Abrangência histórica
+```{r}
+ssp %>% 
+   select(ano, mes) %>% 
+   group_by(ano, mes) %>% 
+   distinct() %>% 
+   head(n = 10)
+
+ssp %>% 
+   select(ano, mes) %>% 
+   group_by(ano, mes) %>% 
+   distinct() %>% 
+   tail(n = 10)
+```
+
+Quantidade de Localidades...
+```{r}
+ssp %>% 
+   select(regiao_nome) %>% 
+   count(regiao_nome) %>% 
+   arrange(desc(n))
+
+ssp %>% 
+   select(municipio_nome) %>% 
+   count(municipio_nome) %>% 
+   arrange(desc(n))
+
+ssp %>% 
+   select(delegacia_nome) %>% 
+   count(delegacia_nome) %>% 
+   arrange(desc(n), delegacia_nome)
 ```
 
