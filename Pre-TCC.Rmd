@@ -5,7 +5,7 @@ date: "06/09/2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -35,6 +35,8 @@ ssp <- readRDS("data/ssp.rds")
 
 ## Base Ames
 
+### Base Ames fornecida no curso R para Ciencia de Dados II
+
 Olhando a base de dados das casas vendidas na cidade de Ames, Iowa, Estados Unidos
 
 ```{r}
@@ -42,13 +44,13 @@ ames %>%
    glimpse()
 ```
 
-Dando uma olhada nas bases originais...
+### Base Ames Original
 
 ```{r}
 AmesHousing::ames_geo %>% 
    glimpse()
-AmesHousing::ames_new %>% 
-   glimpse()
+# AmesHousing::ames_new %>% 
+#    glimpse()
 AmesHousing::ames_raw %>% 
    glimpse()
 ```
@@ -113,7 +115,7 @@ cetesb %>%
 
 ## Base COVID
 
-Olhando a base de dados de contagio da COVID-19 no Brasil
+### Base COVID-19 fornecida no curso R para Ciencia de Dados II
 
 ```{r}
 covid %>% 
@@ -169,7 +171,7 @@ covid %>%
    count()
 ```
 
-Vamos agora dar uma olhada numa base externa da COVID...
+### Base COVID-19 obtida atraves do pacote datacovidbr
 
 ```{r, warning = FALSE, message = FALSE}
 datacovidbr::brasilio() %>% 
@@ -210,4 +212,41 @@ datacovidbr::brMinisterioSaude() %>%
    ) %>% 
    select(date, where(is.numeric)) %>% 
    summary()
+```
+
+## Base Credito
+```{r}
+credito %>% 
+   glimpse()
+```
+```{r}
+credito %>% 
+   count(status)
+
+credito %>% 
+   count(moradia)
+
+credito %>% 
+   count(estado_civil)
+
+credito %>% 
+   count(registros)
+
+credito %>% 
+   count(trabalho)
+
+credito %>% 
+   count(status, registros)
+```
+
+```{r}
+credito %>% 
+   mutate(
+      status = as.factor(status),
+      moradia = as.factor(moradia),
+      estado_civil = as.factor(estado_civil),
+      registros = as.factor(registros),
+      trabalho = as.factor(trabalho)
+   ) %>% 
+   glimpse()
 ```

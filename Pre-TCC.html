@@ -381,6 +381,8 @@ summary {
 ## [10] &quot;rick_and_morty_raw.rds&quot; &quot;ssp.rds&quot;</code></pre>
 <div id="base-ames" class="section level2">
 <h2>Base Ames</h2>
+<div id="base-ames-fornecida-no-curso-r-para-ciencia-de-dados-ii" class="section level3">
+<h3>Base Ames fornecida no curso R para Ciencia de Dados II</h3>
 <p>Olhando a base de dados das casas vendidas na cidade de Ames, Iowa, Estados Unidos</p>
 <pre class="r"><code>ames %&gt;% 
    glimpse()</code></pre>
@@ -463,7 +465,9 @@ summary {
 ## $ venda_tipo                     &lt;chr&gt; &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;...
 ## $ venda_condicao                 &lt;chr&gt; &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Norma...
 ## $ venda_valor                    &lt;int&gt; 215000, 105000, 172000, 244000, 1899...</code></pre>
-<p>Dando uma olhada nas bases originais…</p>
+</div>
+<div id="base-ames-original" class="section level3">
+<h3>Base Ames Original</h3>
 <pre class="r"><code>AmesHousing::ames_geo %&gt;% 
    glimpse()</code></pre>
 <pre><code>## Rows: 2,932
@@ -471,93 +475,9 @@ summary {
 ## $ PID       &lt;chr&gt; &quot;0526301100&quot;, &quot;0526350040&quot;, &quot;0526351010&quot;, &quot;0526353030&quot;, &quot;...
 ## $ Longitude &lt;dbl&gt; -93.61975, -93.61976, -93.61939, -93.61732, -93.63893, -9...
 ## $ Latitude  &lt;dbl&gt; 42.05403, 42.05301, 42.05266, 42.05125, 42.06090, 42.0607...</code></pre>
-<pre class="r"><code>AmesHousing::ames_new %&gt;% 
-   glimpse()</code></pre>
-<pre><code>## Rows: 2
-## Columns: 82
-## $ Order             &lt;dbl&gt; 1, 2
-## $ PID               &lt;chr&gt; &quot;0522150020&quot;, &quot;0529240060&quot;
-## $ `MS SubClass`     &lt;dbl&gt; 20, 20
-## $ `MS Zoning`       &lt;chr&gt; &quot;RL&quot;, &quot;RL&quot;
-## $ `Lot Frontage`    &lt;dbl&gt; 80.00, 100.13
-## $ `Lot Area`        &lt;dbl&gt; 9200, 28546
-## $ Street            &lt;chr&gt; &quot;Pave&quot;, &quot;Pave&quot;
-## $ Alley             &lt;chr&gt; NA, NA
-## $ `Lot Shape`       &lt;chr&gt; &quot;Reg&quot;, &quot;IR1&quot;
-## $ `Land Contour`    &lt;chr&gt; &quot;Lvl&quot;, &quot;Lvl&quot;
-## $ Utilities         &lt;chr&gt; &quot;AllPub&quot;, &quot;AllPub&quot;
-## $ `Lot Config`      &lt;chr&gt; &quot;Inside&quot;, &quot;Inside&quot;
-## $ `Land Slope`      &lt;chr&gt; NA, NA
-## $ Neighborhood      &lt;chr&gt; &quot;Hayden Lake&quot;, &quot;NridgHt&quot;
-## $ `Condition 1`     &lt;chr&gt; &quot;Norm&quot;, &quot;Norm&quot;
-## $ `Condition 2`     &lt;chr&gt; &quot;Norm&quot;, &quot;Norm&quot;
-## $ `Bldg Type`       &lt;chr&gt; &quot;1Fam&quot;, &quot;1Fam&quot;
-## $ `House Style`     &lt;chr&gt; &quot;1Story&quot;, &quot;1Story&quot;
-## $ `Overall Qual`    &lt;dbl&gt; NA, NA
-## $ `Overall Cond`    &lt;dbl&gt; NA, NA
-## $ `Year Built`      &lt;dbl&gt; 2018, 2017
-## $ `Year Remod/Add`  &lt;dbl&gt; 2018, 2017
-## $ `Roof Style`      &lt;chr&gt; &quot;Gable&quot;, &quot;Gable&quot;
-## $ `Roof Matl`       &lt;chr&gt; &quot;CompShg&quot;, &quot;CompShg&quot;
-## $ `Exterior 1st`    &lt;chr&gt; &quot;VinylSd&quot;, &quot;VinylSd&quot;
-## $ `Exterior 2nd`    &lt;chr&gt; &quot;VinylSd&quot;, &quot;VinylSd&quot;
-## $ `Mas Vnr Type`    &lt;chr&gt; NA, NA
-## $ `Mas Vnr Area`    &lt;dbl&gt; 90, 177
-## $ `Exter Qual`      &lt;chr&gt; NA, NA
-## $ `Exter Cond`      &lt;chr&gt; NA, NA
-## $ Foundation        &lt;chr&gt; &quot;PConc&quot;, &quot;PConc&quot;
-## $ `Bsmt Qual`       &lt;chr&gt; NA, NA
-## $ `Bsmt Cond`       &lt;chr&gt; NA, NA
-## $ `Bsmt Exposure`   &lt;chr&gt; NA, NA
-## $ `BsmtFin Type 1`  &lt;chr&gt; &quot;GLQ&quot;, &quot;GLQ&quot;
-## $ `BsmtFin SF 1`    &lt;dbl&gt; 1132, 1854
-## $ `BsmtFin Type 2`  &lt;chr&gt; NA, NA
-## $ `BsmtFin SF 2`    &lt;dbl&gt; NA, NA
-## $ `Bsmt Unf SF`     &lt;dbl&gt; NA, NA
-## $ `Total Bsmt SF`   &lt;dbl&gt; 1793, 2205
-## $ Heating           &lt;chr&gt; &quot;GasA&quot;, &quot;GasA&quot;
-## $ `Heating QC`      &lt;chr&gt; NA, NA
-## $ `Central Air`     &lt;chr&gt; &quot;Y&quot;, &quot;Y&quot;
-## $ Electrical        &lt;chr&gt; NA, NA
-## $ `1st Flr SF`      &lt;dbl&gt; 1793, 2205
-## $ `2nd Flr SF`      &lt;dbl&gt; 0, 0
-## $ `Low Qual Fin SF` &lt;dbl&gt; NA, NA
-## $ `Gr Liv Area`     &lt;dbl&gt; 1793, 2205
-## $ `Bsmt Full Bath`  &lt;dbl&gt; 1, 1
-## $ `Bsmt Half Bath`  &lt;dbl&gt; 0, 0
-## $ `Full Bath`       &lt;dbl&gt; 2, 2
-## $ `Half Bath`       &lt;dbl&gt; 1, 1
-## $ `Bedroom AbvGr`   &lt;dbl&gt; NA, 2
-## $ `Kitchen AbvGr`   &lt;dbl&gt; NA, 1
-## $ `Kitchen Qual`    &lt;chr&gt; NA, NA
-## $ `TotRms AbvGrd`   &lt;dbl&gt; 6, 8
-## $ Functional        &lt;chr&gt; NA, NA
-## $ Fireplaces        &lt;dbl&gt; 1, 0
-## $ `Fireplace Qu`    &lt;chr&gt; NA, NA
-## $ `Garage Type`     &lt;chr&gt; &quot;Attchd&quot;, &quot;Attchd&quot;
-## $ `Garage Yr Blt`   &lt;dbl&gt; 2018, 2017
-## $ `Garage Finish`   &lt;chr&gt; NA, NA
-## $ `Garage Cars`     &lt;dbl&gt; 3, 3
-## $ `Garage Area`     &lt;dbl&gt; 858, 1232
-## $ `Garage Qual`     &lt;chr&gt; NA, NA
-## $ `Garage Cond`     &lt;chr&gt; NA, NA
-## $ `Paved Drive`     &lt;chr&gt; &quot;Y&quot;, &quot;Y&quot;
-## $ `Wood Deck SF`    &lt;dbl&gt; 104, 215
-## $ `Open Porch SF`   &lt;dbl&gt; 242, 232
-## $ `Enclosed Porch`  &lt;dbl&gt; 0, 0
-## $ `3Ssn Porch`      &lt;dbl&gt; 0, 0
-## $ `Screen Porch`    &lt;dbl&gt; 0, 221
-## $ `Pool Area`       &lt;dbl&gt; 0, 0
-## $ `Pool QC`         &lt;chr&gt; NA, NA
-## $ Fence             &lt;chr&gt; NA, NA
-## $ `Misc Feature`    &lt;chr&gt; NA, NA
-## $ `Misc Val`        &lt;dbl&gt; 0, 0
-## $ `Mo Sold`         &lt;dbl&gt; NA, NA
-## $ `Yr Sold`         &lt;dbl&gt; NA, NA
-## $ `Sale Type`       &lt;chr&gt; NA, NA
-## $ `Sale Condition`  &lt;chr&gt; NA, NA
-## $ SalePrice         &lt;dbl&gt; NA, NA</code></pre>
-<pre class="r"><code>AmesHousing::ames_raw %&gt;% 
+<pre class="r"><code># AmesHousing::ames_new %&gt;% 
+#    glimpse()
+AmesHousing::ames_raw %&gt;% 
    glimpse()</code></pre>
 <pre><code>## Rows: 2,930
 ## Columns: 82
@@ -643,6 +563,7 @@ summary {
 ## $ `Sale Type`       &lt;chr&gt; &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, &quot;WD &quot;, ...
 ## $ `Sale Condition`  &lt;chr&gt; &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;,...
 ## $ SalePrice         &lt;int&gt; 215000, 105000, 172000, 244000, 189900, 195500, 2...</code></pre>
+</div>
 </div>
 <div id="base-cetesb" class="section level2">
 <h2>Base Cetesb</h2>
@@ -746,7 +667,8 @@ summary {
 </div>
 <div id="base-covid" class="section level2">
 <h2>Base COVID</h2>
-<p>Olhando a base de dados de contagio da COVID-19 no Brasil</p>
+<div id="base-covid-19-fornecida-no-curso-r-para-ciencia-de-dados-ii" class="section level3">
+<h3>Base COVID-19 fornecida no curso R para Ciencia de Dados II</h3>
 <pre class="r"><code>covid %&gt;% 
    glimpse()</code></pre>
 <pre><code>## Rows: 438,835
@@ -915,7 +837,9 @@ summary {
 ## 4 Pescaria Brava    SC        81
 ## 5 Pinto Bandeira    RS        81
 ## 6 Serra Caiada      RN        81</code></pre>
-<p>Vamos agora dar uma olhada numa base externa da COVID…</p>
+</div>
+<div id="base-covid-19-obtida-atraves-do-pacote-datacovidbr" class="section level3">
+<h3>Base COVID-19 obtida atraves do pacote datacovidbr</h3>
 <pre class="r"><code>datacovidbr::brasilio() %&gt;% 
    filter(
       place_type == &quot;city&quot;,
@@ -1029,6 +953,96 @@ summary {
 ##  3rd Qu.:   0.0000   3rd Qu.: NA      3rd Qu.: NA          
 ##  Max.   : 245.0000   Max.   : NA      Max.   : NA          
 ##                      NA&#39;s   :912004   NA&#39;s   :912004</code></pre>
+</div>
+</div>
+<div id="base-credito" class="section level2">
+<h2>Base Credito</h2>
+<pre class="r"><code>credito %&gt;% 
+   glimpse()</code></pre>
+<pre><code>## Rows: 4,454
+## Columns: 14
+## $ status           &lt;chr&gt; &quot;bom&quot;, &quot;bom&quot;, &quot;ruim&quot;, &quot;bom&quot;, &quot;bom&quot;, &quot;bom&quot;, &quot;bom&quot;, ...
+## $ tempo_empresa    &lt;int&gt; 9, 17, 10, 0, 0, 1, 29, 9, 0, 0, 6, 7, 8, 19, 0, 0...
+## $ moradia          &lt;chr&gt; &quot;alugada&quot;, &quot;alugada&quot;, &quot;própria&quot;, &quot;alugada&quot;, &quot;aluga...
+## $ tempo_emprestimo &lt;int&gt; 60, 60, 36, 60, 36, 60, 60, 12, 60, 48, 48, 36, 60...
+## $ idade            &lt;int&gt; 30, 58, 46, 24, 26, 36, 44, 27, 32, 41, 34, 29, 30...
+## $ estado_civil     &lt;chr&gt; &quot;casada(o)&quot;, &quot;viúva(o)&quot;, &quot;casada(o)&quot;, &quot;solteira(o)...
+## $ registros        &lt;chr&gt; &quot;não&quot;, &quot;não&quot;, &quot;sim&quot;, &quot;não&quot;, &quot;não&quot;, &quot;não&quot;, &quot;não&quot;, &quot;...
+## $ trabalho         &lt;chr&gt; &quot;autônomo&quot;, &quot;fixo&quot;, &quot;autônomo&quot;, &quot;fixo&quot;, &quot;fixo&quot;, &quot;f...
+## $ despesas         &lt;int&gt; 73, 48, 90, 63, 46, 75, 75, 35, 90, 90, 60, 60, 75...
+## $ renda            &lt;int&gt; 129, 131, 200, 182, 107, 214, 125, 80, 107, 80, 12...
+## $ ativos           &lt;int&gt; 0, 0, 3000, 2500, 0, 3500, 10000, 0, 15000, 0, 400...
+## $ dividas          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2500, 260, 0, ...
+## $ valor_emprestimo &lt;int&gt; 800, 1000, 2000, 900, 310, 650, 1600, 200, 1200, 1...
+## $ preco_do_bem     &lt;int&gt; 846, 1658, 2985, 1325, 910, 1645, 1800, 1093, 1957...</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   count(status)</code></pre>
+<pre><code>##   status    n
+## 1    bom 3200
+## 2   ruim 1254</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   count(moradia)</code></pre>
+<pre><code>##   moradia    n
+## 1 alugada  973
+## 2  outras  319
+## 3    pais  783
+## 4    priv  246
+## 5 própria 2107
+## 6    &lt;NA&gt;   26</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   count(estado_civil)</code></pre>
+<pre><code>##    estado_civil    n
+## 1     casada(o) 3241
+## 2 divorciada(o)   38
+## 3   separada(o)  130
+## 4   solteira(o)  977
+## 5      viúva(o)   67
+## 6          &lt;NA&gt;    1</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   count(registros)</code></pre>
+<pre><code>##   registros    n
+## 1       não 3681
+## 2       sim  773</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   count(trabalho)</code></pre>
+<pre><code>##       trabalho    n
+## 1     autônomo 1024
+## 2         fixo 2805
+## 3 meio período  452
+## 4       outros  171
+## 5         &lt;NA&gt;    2</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   count(status, registros)</code></pre>
+<pre><code>##   status registros    n
+## 1    bom       não 2856
+## 2    bom       sim  344
+## 3   ruim       não  825
+## 4   ruim       sim  429</code></pre>
+<pre class="r"><code>credito %&gt;% 
+   mutate(
+      status = as.factor(status),
+      moradia = as.factor(moradia),
+      estado_civil = as.factor(estado_civil),
+      registros = as.factor(registros),
+      trabalho = as.factor(trabalho)
+   ) %&gt;% 
+   glimpse()</code></pre>
+<pre><code>## Rows: 4,454
+## Columns: 14
+## $ status           &lt;fct&gt; bom, bom, ruim, bom, bom, bom, bom, bom, bom, ruim...
+## $ tempo_empresa    &lt;int&gt; 9, 17, 10, 0, 0, 1, 29, 9, 0, 0, 6, 7, 8, 19, 0, 0...
+## $ moradia          &lt;fct&gt; alugada, alugada, própria, alugada, alugada, própr...
+## $ tempo_emprestimo &lt;int&gt; 60, 60, 36, 60, 36, 60, 60, 12, 60, 48, 48, 36, 60...
+## $ idade            &lt;int&gt; 30, 58, 46, 24, 26, 36, 44, 27, 32, 41, 34, 29, 30...
+## $ estado_civil     &lt;fct&gt; casada(o), viúva(o), casada(o), solteira(o), solte...
+## $ registros        &lt;fct&gt; não, não, sim, não, não, não, não, não, não, não, ...
+## $ trabalho         &lt;fct&gt; autônomo, fixo, autônomo, fixo, fixo, fixo, fixo, ...
+## $ despesas         &lt;int&gt; 73, 48, 90, 63, 46, 75, 75, 35, 90, 90, 60, 60, 75...
+## $ renda            &lt;int&gt; 129, 131, 200, 182, 107, 214, 125, 80, 107, 80, 12...
+## $ ativos           &lt;int&gt; 0, 0, 3000, 2500, 0, 3500, 10000, 0, 15000, 0, 400...
+## $ dividas          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2500, 260, 0, ...
+## $ valor_emprestimo &lt;int&gt; 800, 1000, 2000, 900, 310, 650, 1600, 200, 1200, 1...
+## $ preco_do_bem     &lt;int&gt; 846, 1658, 2985, 1325, 910, 1645, 1800, 1093, 1957...</code></pre>
 </div>
 </div>
 
